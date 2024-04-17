@@ -1,0 +1,30 @@
+type: object
+properties:
+  components:
+    type: array
+    items:
+      type: object
+      properties:
+        key:
+          type: string
+          example: d1
+        components:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                example: custname
+              value:
+                type: string
+                example: Abraham
+              input:
+                type: boolean
+                example: true
+              tableView:
+                type: boolean
+                example: true
+        collapsable:
+          type: boolean
+          example: false

@@ -1,0 +1,233 @@
+openapi: 3.0.3
+tags:
+  - name: "ChickenNuggets"
+    description: "ChickenNuggets is a tag for group 1, and related things"
+info:
+  title: Responses with various schema formats
+  description: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#schema-object
+  version: "1.0"
+  contact:
+    name: A-Team
+    email: a-team@goarmy.com
+    url: goarmy.com/apis/support
+servers:
+  - url: https://httpbin.org
+paths:
+  '/anything/top-level-array':
+    post:
+      tags:
+      - ChickenNuggets
+      operationId: "post_anything"
+      description: This payload is an array containing a simple flat object.
+      summary: Simple Array
+      requestBody:
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/ArrayOfFlatObjects'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/ArrayOfFlatObjects'
+    put:
+      operationId: "put_anything"
+      tags:
+      - ChickenNuggets
+      summary: Array of Everything
+      description: This payload is an array containing a complex payload of arrays,
+        objects, and primitives.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                '$ref': '#/components/schemas/ObjectOfEverything'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  '$ref': '#/components/schemas/ObjectOfEverything'
+  '/anything/top-level-object/simple':
+    post:
+      operationId: "put_anything_simple"
+      tags:
+      - ChickenNuggets
+      summary: Simple Object
+      description: This payload is an object comprised of simple flat objects.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nestedObject_1:
+                  '$ref': '#/components/schemas/FlatObject'
+                nestedObject_2:
+                  '$ref': '#/components/schemas/FlatObject'
+                nestedObject_3:
+                  '$ref': '#/components/schemas/FlatObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nestedObject:
+                    '$ref': '#/components/schemas/FlatObject'
+  '/top-level-object/of-everything':
+    post:
+      operationId: "post_object_of_everything"
+      summary: Object of 
+      description: This payload is an object of everything.
+      tags:
+      - ChickenNuggets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/ObjectOfEverything'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/ObjectOfEverything'
+  '/multischema/of-everything':
+    post:
+      operationId: "post_multi_schema_of_everything"
+      tags:
+      - ChickenNuggets
+      summary: Multischema of Everything
+      description: Multischema of Everything
+      requestBody:
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/MultischemaOfEverything'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/MultischemaOfEverything'
+components:
+  schemas:
+    MultischemaOfEverything:
+      oneOf:
+        - oneOf:
+            - '$ref': '#/components/schemas/ArrayOfObjectsOfObjectsAndArrays'
+            - type: object
+              properties:
+                objEverything:
+                  '$ref': '#/components/schemas/ObjectOfEverything'
+                flatObj:
+                  '$ref': '#/components/schemas/FlatObject'
+        - '$ref': '#/components/schemas/ArrayOfPrimitives'
+        - '$ref': '#/components/schemas/ArrayOfFlatObjects'
+        - '$ref': '#/components/schemas/FlatObject'
+        - '$ref': '#/components/schemas/ObjectOfEverything'
+    ArrayOfObjectsOfObjectsAndArrays:
+      type: array
+      description: Array of objects (containing objects and arrays)
+      items:
+        '$ref': '#/components/schemas/ObjectOfObjectsAndArrays'
+    ObjectOfEverything:
+      type: object
+      properties:
+        objectOfObjectsAndArrays:
+          '$ref': '#/components/schemas/ObjectOfObjectsAndArrays'
+        arrayOfObjectsOfObjectsAndArrays:
+          '$ref': '#/components/schemas/ArrayOfObjectsOfObjectsAndArrays'
+        objectOfAdditionalProperties:
+          '$ref': '#/components/schemas/ObjectOfAdditionalPropertiesObjectPolymorphism'
+        string:
+          type: string
+    ArrayOfPrimitives:
+      type: array
+      description: Array of primitives
+      items:
+        type: string
+    ArrayOfFlatObjects:
+      type: array
+      description: Array of flat objects
+      items:
+        '$ref': '#/components/schemas/FlatObject'
+    ObjectOfObjectsAndArrays:
+      type: object
+      description: Object containing objects and arrays
+      properties:
+        singleObject:
+          '$ref': '#/components/schemas/FlatObject'
+        arrayOfPrimitives:
+          '$ref': '#/components/schemas/ArrayOfPrimitives'
+        arrayOfObjects:
+          '$ref': '#/components/schemas/ArrayOfFlatObjects'
+        primitive:
+          type: string
+    ObjectOfAdditionalPropertiesObjectPolymorphism:
+      type: object
+      description: Object containing an `additionalProperties` declaration that's comprised of a polymorphic `oneOf`.
+      additionalProperties:
+        type: object
+        properties:
+          primitive:
+            type: string
+          boolean:
+            type: boolean
+          metadata:
+            nullable: true
+            oneOf:
+              - title: Flat object options
+                type: object
+              - '$ref': '#/components/schemas/FlatObject'
+              - '$ref': '#/components/schemas/ObjectWithArray'
+    FlatObject:
+      type: object
+      description: Simple flat object
+      properties:
+        string:
+          type: string
+        boolean:
+          type: boolean
+        number:
+          type: number
+    ObjectWithArray:
+      title: Metadata Object
+      type: object
+      description: Metadata for defining additional objects related to your API
+      properties:
+        Array:
+          type: array
+          items:
+            type: object
+            properties:
+              inputs:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    input 1:
+                      type: string
+                    input 2:
+                      type: string
+              nums:
+                type: array
+                items:
+                  type: integer
+                  enum:
+                    - 0
+                    - 1
+                    - 2
+                    - 3

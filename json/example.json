@@ -1,0 +1,56 @@
+{
+    "components": [
+        {
+            "key": "d1",
+            "components": [
+                {
+                    "key": "custname",
+                    "value": "Abraham",
+                    "input": true,
+                    "tableView": true
+                },
+                {
+                    "key": "type",
+                    "type": "radio",
+                    "label": "Fisrt",
+                    "values": [
+                        {
+                            "label": "Sole",
+                            "value": "sole",
+                            "shortcut": ""
+                        },
+                        {
+                            "label": "Bata",
+                            "value": "Bata",
+                            "shortcut": ""
+                        }
+                    ],
+                    "validate": {
+                        "required": true
+                    },
+                    "tableView": false
+                },
+                {
+                    "key": "registeredField",
+                    "value": "reg 111",
+                    "input": true
+                },
+                {
+                    "key": "dirc",
+                    "value": "abraham"
+                },
+                {
+                    "key": "gst",
+                    "value": "textfield",                   
+                    "useLocaleSettings": false
+                },
+                {
+                    "key": "pan",
+                    "value": "AAAAA0000",                    
+                    "useLocaleSettings": false
+                }
+            ],
+            "collapsable": false
+        }
+    ]
+}

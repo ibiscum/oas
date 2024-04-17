@@ -1,0 +1,53 @@
+openapi: 3.0.1
+tags:
+  - name: "ChickenNuggets"
+    description: "ChickenNuggets is a tag for group 1, and related things"
+info:
+  title: API definition with a circular $ref
+  description: API definition with a circular $ref
+  version: 1.0.0
+  contact:
+    name: A-Team
+    email: a-team@goarmy.com
+    url: goarmy.com/apis/support
+servers:
+  - url: https://httpbin.org
+paths:
+  '/anything':
+    get:
+      tags:
+      - ChickenNuggets
+      description: Get anything
+      operationId: "get_anything"
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                '$ref': '#/components/schemas/ErrorMessage'
+components:
+  schemas:
+    ErrorMessage:
+      type: object
+      additionalProperties: false
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+        error:
+          type: string
+          nullable: true
+        inner:
+          '$ref': '#/components/schemas/ErrorMessage'
+        canBeRetried:
+          type: string
+          enum:
+            - Unknown
+            - 'Yes'
+            - 'No'
+        detailedErrorCode:
+          type: integer
+          format: int32
