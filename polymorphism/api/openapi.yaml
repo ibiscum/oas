@@ -1,0 +1,718 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: a-team@goarmy.com
+    name: A-Team
+  description: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#schema-object
+  title: Polymorphism support
+  version: 1.0.0
+servers:
+- url: http://localhost:8001
+tags:
+- name: Pets
+paths:
+  /pets:
+    patch:
+      description: oneOf request with a nested allOf
+      operationId: get_pets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/get_pets_request'
+      responses:
+        "200":
+          description: Updated
+      summary: oneOf request with a nested allOf
+      tags:
+      - Pets
+  /anything/all-of-object:
+    post:
+      description: allOf with listed objects
+      operationId: anything-all-of-object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/anything_all_of_object_request'
+      responses:
+        "200":
+          description: OK
+      summary: allOf with listed objects
+      tags:
+      - Pets
+  /anything/any-of-object:
+    post:
+      description: anyOf object
+      operationId: anything-any-of-object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/anything_any_of_object_request'
+      responses:
+        "200":
+          description: OK
+      summary: anyOf object
+      tags:
+      - Pets
+  /anything/any-of-primitive:
+    post:
+      description: description
+      operationId: anything-any-of-primitive
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/anything_any_of_primitive_request'
+      responses:
+        "200":
+          description: OK
+      summary: anyOf primitive
+      tags:
+      - Pets
+  /any-of-with-type:
+    post:
+      description: AnyOf's with a top level type parameter should not render that
+        type outside of their options
+      operationId: any-of-with-type
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/any_of_with_type_request'
+      responses:
+        "204":
+          description: Provides no response body
+      summary: anyOf With Type
+      tags:
+      - Pets
+  /anything/one-of-object:
+    post:
+      description: description
+      operationId: anything-one-of-object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/anything_one_of_object_request'
+      responses:
+        "200":
+          description: OK
+      summary: oneOf object
+      tags:
+      - Pets
+  /anything/one-of-primitive:
+    post:
+      description: description
+      operationId: anything-one-of-primitive
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/anything_one_of_primitive_request'
+      responses:
+        "200":
+          description: OK
+      summary: oneOf primitive
+      tags:
+      - Pets
+  /anything/one-of-object-ref:
+    post:
+      description: description
+      operationId: anything-one-of-object-ref
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/anything_one_of_object_ref_request'
+      responses:
+        "200":
+          description: OK
+      summary: oneOf object with $ref pointers
+      tags:
+      - Pets
+  /one-of-complex:
+    post:
+      description: description
+      operationId: one-of-complex
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/one_of_complex_request'
+        required: true
+      responses:
+        "200":
+          description: OK
+      summary: oneOf object with a complex schema
+      tags:
+      - Pets
+  /anything/nested-one-of-object-ref:
+    post:
+      description: description
+      operationId: anything-nested-one-of-object-ref
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/anything_nested_one_of_object_ref_request'
+      responses:
+        "200":
+          description: OK
+      summary: nested oneOf object with $ref pointers
+      tags:
+      - Pets
+  /anything/nested-one-of-ref:
+    post:
+      description: description
+      operationId: anything-nested-one-of-ref
+      requestBody:
+        $ref: '#/components/requestBodies/nested-one-of-ref'
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Pets
+  /anything/nested-one-of-object-with-nested-one-of:
+    post:
+      description: description
+      operationId: anything-nested-one-of-object-with-nested-one-of
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/anything_nested_one_of_object_with_nested_one_of_request'
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Pets
+  /one-of-with-type:
+    post:
+      description: OneOf's with a top level type parameter should not render that
+        type outside of their options
+      operationId: one-of-with-type
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/one_of_with_type_request'
+      responses:
+        "204":
+          description: Provides no response body
+      summary: One Of With Type
+      tags:
+      - Pets
+components:
+  requestBodies:
+    nested-one-of-ref:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/anything_nested_one_of_ref_request'
+      required: true
+  schemas:
+    Pet:
+      discriminator:
+        propertyName: pet_type
+      properties:
+        pet_type:
+          type: string
+      required:
+      - pet_type
+      title: Pet
+      type: object
+    Dog:
+      allOf:
+      - $ref: '#/components/schemas/Pet'
+      - properties:
+          bark:
+            type: boolean
+          breed:
+            enum:
+            - Dingo
+            - Husky
+            - Retriever
+            - Shepherd
+            type: string
+        type: object
+      properties:
+        pet_type:
+          type: string
+      required:
+      - pet_type
+      title: Woof
+    Cat:
+      allOf:
+      - $ref: '#/components/schemas/Pet'
+      - properties:
+          hunts:
+            type: boolean
+          age:
+            type: integer
+        type: object
+      properties:
+        pet_type:
+          type: string
+      required:
+      - pet_type
+      title: Meow
+      type: object
+    object1:
+      properties:
+        a:
+          type: string
+        b:
+          type: string
+      title: First type of object
+      type: object
+    object2:
+      properties:
+        c:
+          type: string
+        d:
+          type: string
+      title: Second type of object
+      type: object
+    string1:
+      title: First type of string
+      type: string
+    string2:
+      title: Second type of string
+      type: string
+    get_pets_request:
+      discriminator:
+        propertyName: pet_type
+      oneOf:
+      - $ref: '#/components/schemas/Cat'
+      - $ref: '#/components/schemas/Dog'
+    anything_all_of_object_request:
+      allOf:
+      - properties:
+          a:
+            type: string
+          b:
+            type: string
+        title: First type of object
+        type: object
+      - properties:
+          c:
+            type: string
+          d:
+            type: string
+        title: Second type of object
+        type: object
+      type: object
+    First_type_of_object:
+      properties:
+        a:
+          type: string
+        b:
+          type: string
+      title: First type of object
+      type: object
+    Second_type_of_object:
+      properties:
+        c:
+          type: string
+        d:
+          type: string
+      title: Second type of object
+      type: object
+    anything_any_of_object_request:
+      anyOf:
+      - $ref: '#/components/schemas/First_type_of_object'
+      - $ref: '#/components/schemas/Second_type_of_object'
+    anything_any_of_primitive_request:
+      anyOf:
+      - title: First type of primitive
+        type: string
+      - title: Second type of primitive
+        type: integer
+    any_of_with_type_request_event:
+      anyOf:
+      - title: First type of primitive
+        type: string
+      - title: Second type of primitive
+        type: string
+      type: string
+    any_of_with_type_request:
+      properties:
+        event:
+          $ref: '#/components/schemas/any_of_with_type_request_event'
+      type: object
+    anything_one_of_object_request:
+      oneOf:
+      - $ref: '#/components/schemas/First_type_of_object'
+      - $ref: '#/components/schemas/Second_type_of_object'
+    anything_one_of_primitive_request:
+      oneOf:
+      - title: First type of primitive
+        type: string
+      - title: Second type of primitive
+        type: integer
+    anything_one_of_object_ref_request:
+      oneOf:
+      - $ref: '#/components/schemas/object1'
+      - $ref: '#/components/schemas/object2'
+    Andalucia_registration:
+      properties:
+        permit_number:
+          type: string
+        registration_ownership:
+          enum:
+          - OWNER
+          - PROPERTY_MANAGER
+          type: string
+        email:
+          type: string
+        full_name:
+          type: string
+        identification_number:
+          type: string
+      required:
+      - email
+      - full_name
+      - identification_number
+      - permit_number
+      - registration_ownership
+      type: object
+    Andalucia_exemption:
+      properties:
+        reason:
+          enum:
+          - LISTING_TYPE_NOT_INCLUDED
+          - LISTING_NOT_TOURIST_ACCOMMODATION
+          type: string
+        registration_ownership:
+          enum:
+          - OWNER
+          - PROPERTY_MANAGER
+          type: string
+        email:
+          type: string
+        full_name:
+          type: string
+        identification_number:
+          type: string
+      required:
+      - email
+      - full_name
+      - identification_number
+      - reason
+      - registration_ownership
+      type: object
+    Andalucia:
+      properties:
+        listing_id:
+          type: integer
+        regulatory_body:
+          type: string
+        registration:
+          $ref: '#/components/schemas/Andalucia_registration'
+        exemption:
+          $ref: '#/components/schemas/Andalucia_exemption'
+      required:
+      - listing_id
+      - regulatory_body
+      title: Andalucia
+      type: object
+    Baltimore_registration:
+      properties:
+        permit_number:
+          type: string
+        expiration_date:
+          type: string
+        full_name:
+          type: string
+        email:
+          type: string
+        listing_address:
+          type: string
+        attestation_existing_registration:
+          type: boolean
+      required:
+      - attestation_existing_registration
+      - email
+      - expiration_date
+      - full_name
+      - listing_address
+      - permit_number
+      type: object
+    Baltimore_exemption:
+      properties:
+        exemption_reason:
+          enum:
+          - hotel_motel
+          type: string
+        full_name:
+          type: string
+        email:
+          type: string
+        attestation_exemption_claim:
+          type: boolean
+      required:
+      - attestation_exemption_claim
+      - email
+      - exemption_reason
+      - full_name
+      type: object
+    Baltimore:
+      properties:
+        listing_id:
+          type: integer
+        regulatory_body:
+          type: string
+        registration:
+          $ref: '#/components/schemas/Baltimore_registration'
+        exemption:
+          $ref: '#/components/schemas/Baltimore_exemption'
+      required:
+      - listing_id
+      - regulatory_body
+      title: Baltimore
+      type: object
+    Boston_registration:
+      properties:
+        permit_number:
+          type: string
+        email:
+          type: string
+        full_name:
+          type: string
+        listing_address:
+          type: string
+        attestation:
+          type: boolean
+      required:
+      - attestation
+      - email
+      - full_name
+      - listing_address
+      - permit_number
+      type: object
+    Boston_exemption:
+      properties:
+        exemption_reason:
+          enum:
+          - hotel_motel
+          - bed_breakfast_lodging
+          - institutional_business
+          - hospitals
+          type: string
+        listing_address:
+          type: string
+        attestation:
+          type: boolean
+      required:
+      - attestation
+      - exemption_reason
+      - listing_address
+      type: object
+    Boston:
+      properties:
+        listing_id:
+          type: integer
+        regulatory_body:
+          type: string
+        registration:
+          $ref: '#/components/schemas/Boston_registration'
+        exemption:
+          $ref: '#/components/schemas/Boston_exemption'
+      required:
+      - listing_id
+      - regulatory_body
+      title: Boston
+      type: object
+    Catalonia_registration:
+      properties:
+        permit_number:
+          type: string
+        registration_ownership:
+          type: string
+        email:
+          type: string
+        full_name:
+          type: string
+        identification_number:
+          type: string
+      required:
+      - email
+      - full_name
+      - identification_number
+      - permit_number
+      - registration_ownership
+      type: object
+    Catalonia_exemption:
+      properties:
+        reason:
+          enum:
+          - listing_not_full_building
+          - listing_is_shared_room
+          - other_exemption_reason
+          type: string
+        registration_ownership:
+          enum:
+          - OWNER
+          - PROPERTY_MANAGER
+          type: string
+        email:
+          type: string
+        full_name:
+          type: string
+        identification_number:
+          type: string
+      required:
+      - email
+      - full_name
+      - identification_number
+      - reason
+      - registration_ownership
+      type: object
+    Catalonia:
+      properties:
+        listing_id:
+          type: integer
+        regulatory_body:
+          type: string
+        registration:
+          $ref: '#/components/schemas/Catalonia_registration'
+        exemption:
+          $ref: '#/components/schemas/Catalonia_exemption'
+      required:
+      - listing_id
+      - regulatory_body
+      title: Catalonia
+      type: object
+    Chicago_registration:
+      properties:
+        permit_number:
+          type: string
+      required:
+      - permit_number
+      type: object
+    Chicago:
+      properties:
+        listing_id:
+          type: integer
+        regulatory_body:
+          type: string
+        registration:
+          $ref: '#/components/schemas/Chicago_registration'
+      required:
+      - listing_id
+      - registration
+      - regulatory_body
+      title: Chicago
+      type: object
+    Cuba_affiliation:
+      properties:
+        attestation_entrepreneur:
+          type: boolean
+        listing_address:
+          type: string
+      required:
+      - attestation_entrepreneur
+      - listing_address
+      type: object
+    Cuba:
+      properties:
+        listing_id:
+          type: integer
+        regulatory_body:
+          type: string
+        affiliation:
+          $ref: '#/components/schemas/Cuba_affiliation'
+      required:
+      - affiliation
+      - listing_id
+      - regulatory_body
+      title: Cuba
+      type: object
+    Denmark_categorization:
+      properties:
+        listing_type:
+          enum:
+          - primary_residence
+          - houseboat
+          - tent
+          - tree_house
+          - hotel_or_hostel
+          - serviced_apartment
+          - trailer
+          - mobile_home
+          - summer_house
+          type: string
+        data_reporting_status:
+          enum:
+          - private_activity
+          - business_activity
+          type: string
+        data_reporting_bbr:
+          type: string
+        attestation:
+          type: boolean
+        attestation_conditional:
+          type: boolean
+      required:
+      - listing_type
+      type: object
+    Denmark:
+      properties:
+        listing_id:
+          type: integer
+        regulatory_body:
+          type: string
+        categorization:
+          $ref: '#/components/schemas/Denmark_categorization'
+      required:
+      - categorization
+      - listing_id
+      - regulatory_body
+      title: Denmark
+      type: object
+    one_of_complex_request:
+      oneOf:
+      - $ref: '#/components/schemas/Andalucia'
+      - $ref: '#/components/schemas/Baltimore'
+      - $ref: '#/components/schemas/Boston'
+      - $ref: '#/components/schemas/Catalonia'
+      - $ref: '#/components/schemas/Chicago'
+      - $ref: '#/components/schemas/Cuba'
+      - $ref: '#/components/schemas/Denmark'
+      type: object
+    anything_nested_one_of_object_ref_request:
+      additionalProperties: false
+      properties:
+        config:
+          $ref: '#/components/schemas/anything_one_of_object_ref_request'
+      type: object
+    anything_nested_one_of_ref_request_config:
+      oneOf:
+      - $ref: '#/components/schemas/string1'
+      - $ref: '#/components/schemas/string2'
+    anything_nested_one_of_ref_request:
+      additionalProperties: false
+      properties:
+        config:
+          $ref: '#/components/schemas/anything_nested_one_of_ref_request_config'
+      type: object
+    anything_nested_one_of_object_with_nested_one_of_request_config:
+      oneOf:
+      - $ref: '#/components/schemas/object1'
+      - $ref: '#/components/schemas/object2'
+      - $ref: '#/components/schemas/get_pets_request'
+    anything_nested_one_of_object_with_nested_one_of_request:
+      additionalProperties: false
+      properties:
+        config:
+          $ref: '#/components/schemas/anything_nested_one_of_object_with_nested_one_of_request_config'
+      type: object
+    one_of_with_type_request:
+      properties:
+        event:
+          nullable: true
+          oneOf: []
+          type: string
+      type: object

@@ -96,8 +96,8 @@ func main() {
 	fmt.Println("Printing with simple recursive function")
 	// print all components, these could be nested, so let's use a recursive function
 	PrintComponents(data.Components)
-	fmt.Println("\n\nPrinting with indented recursion:")
-	PrintComponentsIndent(data.Components, "") // start with indent of 0
+	// fmt.Println("\n\nPrinting with indented recursion:")
+	// PrintComponentsIndent(data.Components, "") // start with indent of 0
 
 	d := jx.DecodeBytes(input)
 

@@ -9,9 +9,8 @@ info:
   contact:
     name: A-Team
     email: a-team@goarmy.com
-    url: goarmy.com/apis/support
 servers:
-  - url: https://httpbin.org
+  - url: http://localhost:8000
 paths:
   '/anything/top-level-array':
     post:
@@ -57,7 +56,7 @@ paths:
                   '$ref': '#/components/schemas/ObjectOfEverything'
   '/anything/top-level-object/simple':
     post:
-      operationId: "put_anything_simple"
+      operationId: "post_anything_simple"
       tags:
       - ChickenNuggets
       summary: Simple Object
@@ -125,6 +124,7 @@ paths:
 components:
   schemas:
     MultischemaOfEverything:
+      title: MultischemaOfEverything
       oneOf:
         - oneOf:
             - '$ref': '#/components/schemas/ArrayOfObjectsOfObjectsAndArrays'
@@ -141,10 +141,12 @@ components:
     ArrayOfObjectsOfObjectsAndArrays:
       type: array
       description: Array of objects (containing objects and arrays)
+      title: ArrayOfObjectsOfObjectsAndArrays
       items:
         '$ref': '#/components/schemas/ObjectOfObjectsAndArrays'
     ObjectOfEverything:
       type: object
+      title: ObjectOfEverything
       properties:
         objectOfObjectsAndArrays:
           '$ref': '#/components/schemas/ObjectOfObjectsAndArrays'
@@ -157,16 +159,19 @@ components:
     ArrayOfPrimitives:
       type: array
       description: Array of primitives
+      title: ArrayOfPrimitives
       items:
         type: string
     ArrayOfFlatObjects:
       type: array
       description: Array of flat objects
+      title: ArrayOfFlatObjects
       items:
         '$ref': '#/components/schemas/FlatObject'
     ObjectOfObjectsAndArrays:
       type: object
       description: Object containing objects and arrays
+      title: ObjectOfObjectsAndArrays
       properties:
         singleObject:
           '$ref': '#/components/schemas/FlatObject'
@@ -178,6 +183,7 @@ components:
           type: string
     ObjectOfAdditionalPropertiesObjectPolymorphism:
       type: object
+      title: ObjectOfAdditionalPropertiesObjectPolymorphism
       description: Object containing an `additionalProperties` declaration that's comprised of a polymorphic `oneOf`.
       additionalProperties:
         type: object
@@ -195,6 +201,7 @@ components:
               - '$ref': '#/components/schemas/ObjectWithArray'
     FlatObject:
       type: object
+      title: FlatObject
       description: Simple flat object
       properties:
         string:
@@ -204,11 +211,12 @@ components:
         number:
           type: number
     ObjectWithArray:
-      title: Metadata Object
+      title: ObjectWithArray
       type: object
       description: Metadata for defining additional objects related to your API
       properties:
         Array:
+          title: Array
           type: array
           items:
             type: object

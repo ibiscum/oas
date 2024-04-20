@@ -1,2 +1,0 @@
-generator:
-  ignore_not_implemented: ["sum types with same names", "complex anyOf", "discriminator inference"]

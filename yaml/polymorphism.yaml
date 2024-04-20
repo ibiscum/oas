@@ -8,9 +8,8 @@ info:
   contact:
     name: A-Team
     email: a-team@goarmy.com
-    url: goarmy.com/apis/support
 servers:
-  - url: https://httpbin.org
+  - url: http://localhost:8001
 paths:
   '/pets':
     patch:
@@ -596,6 +595,7 @@ components:
             additionalProperties: false
   schemas:
     Pet:
+      title: Pet
       type: object
       required:
         - pet_type
@@ -606,6 +606,11 @@ components:
         propertyName: pet_type
     Dog:
       title: Woof
+      required:
+        - pet_type
+      properties:
+        pet_type:
+          type: string
       allOf:
         - '$ref': '#/components/schemas/Pet'
         - type: object
@@ -622,6 +627,11 @@ components:
     Cat:
       title: Meow
       type: object
+      required:
+        - pet_type
+      properties:
+        pet_type:
+          type: string
       allOf:
         - '$ref': '#/components/schemas/Pet'
         - type: object
@@ -647,6 +657,8 @@ components:
         d:
           type: string
     string1:
+      title: First type of string
       type: string
     string2:
+      title: Second type of string
       type: string

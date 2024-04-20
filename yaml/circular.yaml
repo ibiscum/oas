@@ -9,7 +9,6 @@ info:
   contact:
     name: A-Team
     email: a-team@goarmy.com
-    url: goarmy.com/apis/support
 servers:
   - url: https://httpbin.org
 paths:

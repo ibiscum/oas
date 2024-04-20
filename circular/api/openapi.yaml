@@ -1,0 +1,58 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: a-team@goarmy.com
+    name: A-Team
+  description: API definition with a circular $ref
+  title: API definition with a circular $ref
+  version: 1.0.0
+servers:
+- url: https://httpbin.org
+tags:
+- description: "ChickenNuggets is a tag for group 1, and related things"
+  name: ChickenNuggets
+paths:
+  /anything:
+    get:
+      description: Get anything
+      operationId: get_anything
+      responses:
+        "200":
+          description: OK
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: Not found
+      tags:
+      - ChickenNuggets
+components:
+  schemas:
+    ErrorMessage:
+      additionalProperties: false
+      example:
+        detailedErrorCode: 6
+        canBeRetried: Unknown
+        error: error
+        inner: null
+        statusCode: 0
+      properties:
+        statusCode:
+          format: int32
+          type: integer
+        error:
+          nullable: true
+          type: string
+        inner:
+          $ref: '#/components/schemas/ErrorMessage'
+        canBeRetried:
+          enum:
+          - Unknown
+          - "Yes"
+          - "No"
+          type: string
+        detailedErrorCode:
+          format: int32
+          type: integer
+      type: object

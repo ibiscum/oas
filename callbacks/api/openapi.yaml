@@ -1,0 +1,130 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: a-team@goarmy.com
+    name: A-Team
+  description: API definition with callback
+  title: Callback Example
+  version: 1.0.0
+servers:
+- url: https://httpbin.org
+tags:
+- description: "ChickenNuggets is a tag for group 1, and related things"
+  name: ChickenNuggets
+paths:
+  /streams:
+    post:
+      callbacks:
+        onData:
+          '{$request.query.callbackUrl}/data':
+            post:
+              operationId: onData_DataPost
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/_streams_post_request'
+                description: subscription payload
+              responses:
+                "202":
+                  content:
+                    application/json:
+                      examples:
+                        user:
+                          value:
+                            user:
+                              email: test@example.com
+                              name: Test user name
+                      schema:
+                        $ref: '#/components/schemas/_streams_post_202_response'
+                  description: Your server implementation should return this HTTP
+                    status code if the data was received successfully
+                "204":
+                  content:
+                    application/json:
+                      example:
+                        id: 12345
+                        email: test@example.com
+                        name: Test user name
+                      schema:
+                        $ref: '#/components/schemas/_streams_post_204_response'
+                  description: Your server should return this HTTP status code if
+                    no longer interested in further updates
+              x-callback-request: true
+      description: subscribes a client to receive out-of-band data
+      operationId: post_streams
+      parameters:
+      - description: the location where data will be sent. Must be network accessible
+          by the source server
+        explode: true
+        in: query
+        name: callbackUrl
+        required: true
+        schema:
+          example: https://tonys-server.com
+          format: uri
+          type: string
+        style: form
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/post_streams_201_response'
+          description: subscription successfully created
+      tags:
+      - ChickenNuggets
+components:
+  schemas:
+    _streams_post_request:
+      properties:
+        timestamp:
+          format: date-time
+          type: string
+        userData:
+          type: string
+      type: object
+    _streams_post_204_response:
+      example:
+        name: name
+        id: 0
+        email: email
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        id:
+          format: int64
+          type: integer
+      type: object
+    _streams_post_202_response_User:
+      example:
+        name: name
+        email: email
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+      type: object
+    _streams_post_202_response:
+      example:
+        User:
+          name: name
+          email: email
+      properties:
+        User:
+          $ref: '#/components/schemas/_streams_post_202_response_User'
+      type: object
+    post_streams_201_response:
+      description: subscription information
+      example:
+        subscriptionId: 2531329f-fb09-4ef7-887e-84e648214436
+      properties:
+        subscriptionId:
+          description: this unique identifier allows management of the subscription
+          example: 2531329f-fb09-4ef7-887e-84e648214436
+          type: string
+      required:
+      - subscriptionId
